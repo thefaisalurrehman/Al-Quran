@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/rateUs"
+        android:icon="@drawable/baseline_star_rate_24"
+        android:title="@string/rateus" />
+    <item
+        android:id="@+id/shareApp"
+        android:icon="@drawable/ic_baseline_share_24"
+        android:title="@string/share_app" />
+    <item
+        android:id="@+id/feedback"
+        android:icon="@drawable/ic_baseline_feedback_24"
+        android:title="@string/feedback" />
+</menu>

@@ -1,28 +1,36 @@
 package com.holyquran.alquran.models.repositories
 
 import android.content.Context
-import android.util.Log
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.holyquran.alquran.models.datamodels.HolyQuran
-import com.holyquran.alquran.models.datamodels.Quran
-import java.io.IOException
+import com.holyquran.alquran.models.datamodels.surah.SurahInfoItem
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 
 class StartupRepository {
 
     private val TAG = "StartupRepository"
 
-     fun getJsonDataFromAsset(context: Context): HolyQuran {
-        lateinit var jsonString: String
-        try {
-            jsonString = context.assets.open("quran.json")
-                .bufferedReader()
-                .use { it.readText() }
-        } catch (ioException: IOException) {
-            Log.d(TAG, "getJsonDataFromAsset: ${ioException.localizedMessage}")
+    suspend fun getCompleteQuran(context: Context): HolyQuran {
+        val jsonString: Deferred<HolyQuran> = CoroutineScope(Dispatchers.IO).async {
+            val quran = context.assets.open("quran.json").bufferedReader().use { it.readText() }
+            val listCountryType = object : TypeToken<HolyQuran>() {}.type
+            Gson().fromJson(quran, listCountryType)
         }
-
-        val listCountryType = object : TypeToken<HolyQuran>() {}.type
-        return Gson().fromJson(jsonString, listCountryType)
+        return jsonString.await()
     }
+
+
+    suspend fun getSurahList(context: Context): List<SurahInfoItem> {
+        val jsonString: Deferred<List<SurahInfoItem>> = CoroutineScope(Dispatchers.IO).async {
+            val quran = context.assets.open("surah.json").bufferedReader().use { it.readText() }
+            val listCountryType = object : TypeToken<List<SurahInfoItem>>() {}.type
+            Gson().fromJson(quran, listCountryType)
+        }
+        return jsonString.await()
+    }
+
 }

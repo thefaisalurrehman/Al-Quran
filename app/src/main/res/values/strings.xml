@@ -1,4 +1,14 @@
 <resources>
     <string name="app_name">Al Quran</string>
+    <string name="al_quran_ar">القرأن الكريم</string>
     <string name="bismillah">بِسْمِ اللَّهِ الرَّحْمَـٰنِ الرَّحِيم</string>
+
+    <string name="rateus">Rate Us</string>
+    <string name="privacy_policy">Privacy Policy</string>
+
+    <string name="feedback">Feedback</string>
+    <string name="share_app">Share App</string>
+    <string name="share_app_msg">By the grace of Allah, this is a completely free app that does not display ads and does not ask for any monthly charges or donations.\n
+You are requested to install the app yourself and use it and also share this app with your relatives and friends.\n God bless you
+Click on the below link to install the app</string>
 </resources>
