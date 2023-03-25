@@ -12,7 +12,6 @@ import kotlinx.coroutines.async
 
 class StartupRepository {
 
-    private val TAG = "StartupRepository"
 
     suspend fun getCompleteQuran(context: Context): HolyQuran {
         val jsonString: Deferred<HolyQuran> = CoroutineScope(Dispatchers.IO).async {

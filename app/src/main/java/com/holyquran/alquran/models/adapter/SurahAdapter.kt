@@ -8,7 +8,7 @@ import com.holyquran.alquran.databinding.SurahItemsBinding
 import com.holyquran.alquran.models.ISurah
 import com.holyquran.alquran.models.datamodels.surah.SurahInfoItem
 
-class SurahAdapter(private val list: List<SurahInfoItem>, private val iSurah: ISurah) :
+class SurahAdapter(private var list: List<SurahInfoItem>, private val iSurah: ISurah) :
     RecyclerView.Adapter<SurahAdapter.SurahHolder>() {
 
     inner class SurahHolder(val binding: SurahItemsBinding) : ViewHolder(binding.root)
@@ -34,4 +34,10 @@ class SurahAdapter(private val list: List<SurahInfoItem>, private val iSurah: IS
         }
 
     }
+
+    fun filterList(filteredSurah: ArrayList<SurahInfoItem>) {
+        this.list = filteredSurah
+        notifyDataSetChanged()
+    }
+
 }

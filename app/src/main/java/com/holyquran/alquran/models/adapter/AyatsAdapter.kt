@@ -19,6 +19,7 @@ class AyatsAdapter(private val list: List<Aya>) :
     override fun getItemCount(): Int = list.size
 
     override fun onBindViewHolder(holder: AyatsHolder, position: Int) {
+
         holder.binding.ayaTV.text = list[position].text
         holder.binding.indexTV.text = list[position].index
     }
