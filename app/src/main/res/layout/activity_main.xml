@@ -56,8 +56,8 @@
             android:layout_marginHorizontal="10dp"
             android:background="@drawable/bg_rec"
             android:drawableEnd="@drawable/baseline_search_24"
-            android:textColor="@color/black"
             android:paddingHorizontal="8dp"
+            android:textColor="@color/black"
             app:layout_constraintTop_toBottomOf="@id/toolbar" />
 
         <androidx.recyclerview.widget.RecyclerView
@@ -77,6 +77,23 @@
             android:elevation="2dp"
             android:visibility="gone" />
 
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/lastRead"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_marginBottom="30dp"
+            android:fontFamily="@font/roboto"
+            android:paddingHorizontal="16dp"
+            android:text="Open Last Read"
+            android:textAllCaps="false"
+            android:textColor="@color/black"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            app:backgroundTint="@color/page_bg"
+            app:cornerRadius="10dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

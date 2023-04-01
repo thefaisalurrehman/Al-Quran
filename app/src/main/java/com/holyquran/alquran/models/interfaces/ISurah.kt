@@ -1,4 +1,4 @@
-package com.holyquran.alquran.models
+package com.holyquran.alquran.models.interfaces
 
 interface ISurah {
     fun onSurahClicked(position: Int)

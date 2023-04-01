@@ -16,10 +16,17 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.navigation.NavigationView
 import com.holyquran.alquran.R
+import com.holyquran.alquran.common.Constants
+import com.holyquran.alquran.common.Constants.IS_LAST_READ
+import com.holyquran.alquran.common.Constants.LAST_READ_AYA_NUMBER
+import com.holyquran.alquran.common.Constants.LAST_READ_SURAH_NUMBER
+import com.holyquran.alquran.common.MyPreference
+import com.holyquran.alquran.common.isVisible
+import com.holyquran.alquran.common.visible
 import com.holyquran.alquran.databinding.ActivityMainBinding
-import com.holyquran.alquran.models.ISurah
 import com.holyquran.alquran.models.adapter.SurahAdapter
 import com.holyquran.alquran.models.datamodels.surah.SurahInfoItem
+import com.holyquran.alquran.models.interfaces.ISurah
 import com.holyquran.alquran.ui.fragments.AyatsFragment
 import com.holyquran.alquran.ui.vm.SurahViewModel
 import java.util.*
@@ -29,20 +36,33 @@ class MainActivity : AppCompatActivity(), ISurah, NavigationView.OnNavigationIte
     val viewModel: SurahViewModel by viewModels()
     private lateinit var adapter: SurahAdapter
     private var fetchedList = ArrayList<SurahInfoItem>()
+    var surahPosition: Int? = null
+    var aYaPosition: Int? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         viewModel.getSurahList(applicationContext)
+        val linearLayoutManager = LinearLayoutManager(this)
         viewModel.surahList.observe(this) {
             fetchedList.clear()
             fetchedList.addAll(it)
             adapter = SurahAdapter(it, this@MainActivity)
             binding.run {
                 recyclerview.adapter = adapter
-                recyclerview.layoutManager = LinearLayoutManager(this@MainActivity)
+                recyclerview.layoutManager = linearLayoutManager
             }
+        }
+
+        surahPosition = MyPreference.with(applicationContext).getInt(LAST_READ_SURAH_NUMBER, 0)
+        aYaPosition = MyPreference.with(applicationContext).getInt(LAST_READ_AYA_NUMBER, 0)
+
+
+        binding.lastRead.setOnClickListener {
+            it.isVisible()
+            surahPosition?.let { pos -> viewModel.setAyaList(pos) }
+            goToAya(aYaPosition, true)
         }
 
         viewModel.fetchCompleteQuran(applicationContext)
@@ -85,14 +105,34 @@ class MainActivity : AppCompatActivity(), ISurah, NavigationView.OnNavigationIte
             }
         }
 
-        adapter.filterList(filteredNames)
+        if (::adapter.isInitialized) {
+            adapter.filterList(filteredNames)
+        }
+
     }
 
     override fun onSurahClicked(position: Int) {
         viewModel.setAyaList(position)
+        MyPreference.with(this).save(LAST_READ_SURAH_NUMBER, position)
+        goToAya(isLastRead = false)
+    }
+
+    private fun goToAya(position: Int? = null, isLastRead: Boolean) {
         binding.frame.isVisible = true
-        supportFragmentManager.beginTransaction().add(binding.frame.id, AyatsFragment())
+        val bundle = Bundle()
+        bundle.putBoolean(IS_LAST_READ, isLastRead)
+        position?.let {
+            bundle.putInt(Constants.LAST_READ_AYA_NUMBER, position)
+        }
+        val fragment = AyatsFragment()
+        fragment.arguments = bundle
+        supportFragmentManager.beginTransaction().add(binding.frame.id, fragment)
             .addToBackStack("Aya").commit()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (surahPosition != 0 && aYaPosition != 0) binding.lastRead.visible()
     }
 
     private fun backPress() {

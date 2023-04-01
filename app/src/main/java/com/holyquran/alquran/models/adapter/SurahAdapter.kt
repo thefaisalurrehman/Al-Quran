@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.holyquran.alquran.databinding.SurahItemsBinding
-import com.holyquran.alquran.models.ISurah
+import com.holyquran.alquran.models.interfaces.ISurah
 import com.holyquran.alquran.models.datamodels.surah.SurahInfoItem
 
 class SurahAdapter(private var list: List<SurahInfoItem>, private val iSurah: ISurah) :
