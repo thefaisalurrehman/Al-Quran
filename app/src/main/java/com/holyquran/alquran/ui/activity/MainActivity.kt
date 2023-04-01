@@ -21,7 +21,7 @@ import com.holyquran.alquran.common.Constants.IS_LAST_READ
 import com.holyquran.alquran.common.Constants.LAST_READ_AYA_NUMBER
 import com.holyquran.alquran.common.Constants.LAST_READ_SURAH_NUMBER
 import com.holyquran.alquran.common.MyPreference
-import com.holyquran.alquran.common.isVisible
+import com.holyquran.alquran.common.gone
 import com.holyquran.alquran.common.visible
 import com.holyquran.alquran.databinding.ActivityMainBinding
 import com.holyquran.alquran.models.adapter.SurahAdapter
@@ -36,8 +36,8 @@ class MainActivity : AppCompatActivity(), ISurah, NavigationView.OnNavigationIte
     val viewModel: SurahViewModel by viewModels()
     private lateinit var adapter: SurahAdapter
     private var fetchedList = ArrayList<SurahInfoItem>()
-    var surahPosition: Int? = null
-    var aYaPosition: Int? = null
+    private var surahPosition: Int? = null
+    private var aYaPosition: Int? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -60,7 +60,7 @@ class MainActivity : AppCompatActivity(), ISurah, NavigationView.OnNavigationIte
 
 
         binding.lastRead.setOnClickListener {
-            it.isVisible()
+            it.gone()
             surahPosition?.let { pos -> viewModel.setAyaList(pos) }
             goToAya(aYaPosition, true)
         }
@@ -118,7 +118,8 @@ class MainActivity : AppCompatActivity(), ISurah, NavigationView.OnNavigationIte
     }
 
     private fun goToAya(position: Int? = null, isLastRead: Boolean) {
-        binding.frame.isVisible = true
+        binding.lastRead.gone()
+        binding.frame.visible()
         val bundle = Bundle()
         bundle.putBoolean(IS_LAST_READ, isLastRead)
         position?.let {
@@ -132,6 +133,10 @@ class MainActivity : AppCompatActivity(), ISurah, NavigationView.OnNavigationIte
 
     override fun onResume() {
         super.onResume()
+        checkLastRead()
+    }
+
+    fun checkLastRead() {
         if (surahPosition != 0 && aYaPosition != 0) binding.lastRead.visible()
     }
 
@@ -155,6 +160,13 @@ class MainActivity : AppCompatActivity(), ISurah, NavigationView.OnNavigationIte
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
 
         when (item.itemId) {
+
+            R.id.lastRead -> {
+                binding.lastRead.gone()
+                surahPosition?.let { pos -> viewModel.setAyaList(pos) }
+                goToAya(aYaPosition, true)
+            }
+
             R.id.rateUs -> {
                 try {
                     val url =
@@ -175,7 +187,8 @@ class MainActivity : AppCompatActivity(), ISurah, NavigationView.OnNavigationIte
             }
 
         }
-        return false
+        binding.drawerLayout.closeDrawer(GravityCompat.START)
+        return true
     }
 
     private fun sendEmail() {

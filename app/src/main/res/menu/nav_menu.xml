@@ -2,6 +2,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
+        android:id="@+id/lastRead"
+        android:icon="@drawable/baseline_refresh_24"
+        android:title="@string/last_read" />
+
+    <item
         android:id="@+id/rateUs"
         android:icon="@drawable/baseline_star_rate_24"
         android:title="@string/rateus" />

@@ -48,7 +48,7 @@ class AyatsFragment : Fragment(), IAdapterPosition {
 
         binding.run {
             viewModel?.getAyaList()?.let {
-                adapter = AyatsAdapter(it,this@AyatsFragment)
+                adapter = AyatsAdapter(it, this@AyatsFragment)
                 recyclerview.layoutManager = linearLayoutManager
                 recyclerview.adapter = adapter
                 if (isLastRead != null && isLastRead == true && lastAyaNumber != null) {
@@ -62,6 +62,11 @@ class AyatsFragment : Fragment(), IAdapterPosition {
     override fun onDestroyView() {
         MyPreference.with(requireContext()).save(LAST_READ_AYA_NUMBER, currentAyaPosition)
         super.onDestroyView()
+    }
+
+    override fun onDestroy() {
+        (activity as MainActivity).checkLastRead()
+        super.onDestroy()
     }
 
     override fun currentPosition(position: Int) {
